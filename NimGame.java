@@ -43,7 +43,15 @@ public class NimGame {
     }
 
     private static void printHeaps(int heap1, int heap2, int heap3) {
-        System.out.println("Heap 1: " + heap1 + "  Heap 2: " + heap2 + "  Heap 3: " + heap3);
+        System.out.println("Heap 1: " + displayHeaps(heap1) + "  Heap 2: " + displayHeaps(heap2) + "  Heap 3: " + displayHeaps(heap3));
+    }
+
+    private static String displayHeaps(int count) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < count; i++) {
+            result.append("| ");
+        }
+        return result.toString().trim();
     }
 
     private static void playerMove(Scanner scanner, int heap1, int heap2, int heap3) {
@@ -78,7 +86,11 @@ public class NimGame {
         System.out.println("Computer's turn:");
 
         // Generate random move
-        int heapIndex = random.nextInt(3) + 1;
+        int heapIndex;
+        do {
+            heapIndex = random.nextInt(3) + 1;
+        } while ((heapIndex == 1 && heap1 == 0) || (heapIndex == 2 && heap2 == 0) || (heapIndex == 3 && heap3 == 0));
+
         int stonesToRemove = random.nextInt(Math.max(heap1, Math.max(heap2, heap3))) + 1;
 
         // Update the selected heap
