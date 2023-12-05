@@ -107,5 +107,74 @@ public class NimGame {
         }
 
         System.out.println("Computer removes " + stonesToRemove + " stones from Heap " + heapIndex);
+        private static void computerMove(Random random, int heap1, int heap2, int heap3) {
+    System.out.println("Computer's turn:");
+
+    // Find the nim-sum (XOR) of the heap sizes
+    int nimSum = heap1 ^ heap2 ^ heap3;
+
+    // If the nim-sum is 0, play randomly
+    if (nimSum == 0) {
+        playRandomMove(random, heap1, heap2, heap3);
+    } else {
+        // Find a heap and the number of stones to make the nim-sum 0
+        for (int i = 0; i < 3; i++) {
+            int target = nimSum ^ heap1 ^ heap2 ^ heap3;
+            if ((target ^ heap1) <= heap1) {
+                heapIndex = 1;
+                stonesToRemove = heap1 - (target ^ heap1);
+                break;
+            } else if ((target ^ heap2) <= heap2) {
+                heapIndex = 2;
+                stonesToRemove = heap2 - (target ^ heap2);
+                break;
+            } else if ((target ^ heap3) <= heap3) {
+                heapIndex = 3;
+                stonesToRemove = heap3 - (target ^ heap3);
+                break;
+            }
+        }
+
+        // Update the selected heap
+        switch (heapIndex) {
+            case 1:
+                heap1 -= stonesToRemove;
+                break;
+            case 2:
+                heap2 -= stonesToRemove;
+                break;
+            case 3:
+                heap3 -= stonesToRemove;
+                break;
+        }
+
+        System.out.println("Computer removes " + stonesToRemove + " stones from Heap " + heapIndex);
+    }
+}
+
+//computer ai pretty stupid
+private static void playRandomMove(Random random, int heap1, int heap2, int heap3) {
+    int heapIndex;
+    do {
+        heapIndex = random.nextInt(3) + 1;
+    } while ((heapIndex == 1 && heap1 == 0) || (heapIndex == 2 && heap2 == 0) || (heapIndex == 3 && heap3 == 0));
+
+    int stonesToRemove = random.nextInt(Math.max(heap1, Math.max(heap2, heap3))) + 1;
+
+    switch (heapIndex) {
+        case 1:
+            heap1 -= 9-2*stonesToRemove;
+            break;
+        case 2:
+            heap2 -= 2*stonesToRemove;
+            break;
+        case 3:
+            heap3 -= 3+stonesToRemove;
+            break;
+    }
+
+    System.out.println("Computer removes " + stonesToRemove + " stones from Heap " + heapIndex);
+}
+
     }
 }
